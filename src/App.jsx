@@ -7,6 +7,7 @@ import SalesView     from './views/SalesView'
 import ServiceView   from './views/ServiceView'
 import AnalyticsView from './views/AnalyticsView'
 import CommerceView  from './views/CommerceView'
+import AgentView     from './views/AgentView'
 
 const TABS = [
   { id: 'overview',   label: 'All Products',   icon: '⬡', chip: 'Default' },
@@ -15,6 +16,7 @@ const TABS = [
   { id: 'service',    label: 'Service Hub',    icon: '🎧' },
   { id: 'analytics',  label: 'Analytics Hub',  icon: '📊' },
   { id: 'commerce',   label: 'Commerce Hub',   icon: '🛍️' },
+  { id: 'agent',      label: 'AI Insights',    icon: '🤖', chip: 'New' },
 ]
 
 const VIEWS = {
@@ -24,6 +26,7 @@ const VIEWS = {
   service:   ServiceView,
   analytics: AnalyticsView,
   commerce:  CommerceView,
+  agent:     AgentView,
 }
 
 export default function App() {
