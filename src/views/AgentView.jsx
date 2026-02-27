@@ -14,6 +14,27 @@ function RichText({ text }) {
   return <p dangerouslySetInnerHTML={{ __html: html }} />
 }
 
+// ─── Sparkle / diamond icon ───────────────────────────────────────────────────
+function SparkleIcon({ size = 16, className = '' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className} aria-hidden>
+      <path d="M8 1.5L9.5 6.5L14.5 8L9.5 9.5L8 14.5L6.5 9.5L1.5 8L6.5 6.5L8 1.5Z" fill="currentColor"/>
+    </svg>
+  )
+}
+
+// ─── Trend chart icon ─────────────────────────────────────────────────────────
+function TrendIcon({ dir = 'up' }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+      {dir === 'up'
+        ? <polyline points="2,13 6,8 10,10 16,4" stroke="#6366F1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        : <polyline points="2,5 6,10 10,8 16,14" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      }
+    </svg>
+  )
+}
+
 // ─── Accent class helper ──────────────────────────────────────────────────────
 function accentClass(accent) {
   const map = { brand: 'agent-accent-brand', info: 'agent-accent-info', success: 'agent-accent-success', warning: 'agent-accent-warning', purple: 'agent-accent-purple' }
@@ -71,11 +92,11 @@ export default function AgentView() {
       <div className="agent-hero">
         <div className="agent-hero-inner">
           <div className="agent-ask-wrap">
-            <span className="agent-bot-icon" aria-hidden>🤖</span>
+            <span className="agent-bot-icon" aria-hidden><SparkleIcon size={18} /></span>
             <input
               ref={inputRef}
               className="agent-ask-input"
-              placeholder="Ask anything about your business… e.g. 'Why did revenue drop?' or 'How are my campaigns performing?'"
+              placeholder="Ask about your business"
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAsk()}
@@ -91,8 +112,7 @@ export default function AgentView() {
 
           {!showingResponse && (
             <div className="agent-suggestions-row">
-              <span className="agent-suggestions-label">Try:</span>
-              {SUGGESTED_QUESTIONS.map(q => (
+              {SUGGESTED_QUESTIONS.slice(0, 2).map(q => (
                 <button key={q} className="agent-chip" onClick={() => handleSuggestion(q)}>
                   {q}
                 </button>
@@ -274,45 +294,49 @@ export default function AgentView() {
               {DEFAULT_INSIGHTS.map(insight => {
                 const isHighlighted = highlightedIds.length === 0 || highlightedIds.includes(insight.id)
                 const isDimmed      = highlightedIds.length > 0   && !highlightedIds.includes(insight.id)
+                const trendDir      = insight.type === 'positive' ? 'up' : 'down'
 
                 return (
                   <div
                     key={insight.id}
                     className={[
                       'insight-card',
-                      `insight-${insight.type}`,
                       isDimmed      ? 'insight-dimmed'      : '',
                       isHighlighted && highlightedIds.length > 0 ? 'insight-highlighted' : '',
-                    ].join(' ')}
+                    ].filter(Boolean).join(' ')}
                   >
-                    {/* Card main content */}
                     <div className="insight-card-main">
                       <div className="insight-card-top">
-                        <span className="insight-card-icon">{insight.icon}</span>
-                        <div className="insight-card-title-wrap">
-                          <div className="insight-card-title">{insight.title}</div>
-                          <div className="insight-card-stat">{insight.stat}</div>
+                        <div className="insight-card-left">
+                          <TrendIcon dir={trendDir} />
+                          <span className="insight-card-label">{insight.stat}</span>
                         </div>
+                        <button
+                          className="insight-ai-link"
+                          onClick={() => handleSuggestion(`Tell me more about ${insight.title.toLowerCase()}`)}
+                        >
+                          <SparkleIcon size={12} />
+                          Get more AI insights &gt;
+                        </button>
                       </div>
+                      <div className="insight-card-title">{insight.title}</div>
                       <p className="insight-card-body">{insight.body}</p>
-                      <button
-                        className="agent-chip insight-ask-btn"
-                        onClick={() => handleSuggestion(`Tell me more about ${insight.title.toLowerCase()}`)}
-                      >
-                        Ask AI about this →
-                      </button>
-                    </div>
-
-                    {/* ── Contextual upsell strip (data-contextual) ── */}
-                    <div className={`insight-upsell-strip ${accentClass(insight.upsell.accent)}`}>
-                      <span className="insight-upsell-icon">{insight.upsell.icon}</span>
-                      <span className="insight-upsell-label">{insight.upsell.label}</span>
-                      <span className="insight-upsell-teaser">{insight.upsell.teaser}</span>
-                      <button className="insight-upsell-cta">{insight.upsell.cta}</button>
                     </div>
                   </div>
                 )
               })}
+            </div>
+
+            {/* ── Venmo promo banner ── */}
+            <div className="venmo-promo-banner">
+              <div className="venmo-promo-logo">
+                <span className="venmo-v">V</span>
+              </div>
+              <div className="venmo-promo-body">
+                <div className="venmo-promo-title">Venmo can help increase your reach</div>
+                <div className="venmo-promo-sub">Accept Venmo payments and reach 80M+ active users</div>
+              </div>
+              <button className="venmo-promo-btn">Learn more</button>
             </div>
           </section>
 

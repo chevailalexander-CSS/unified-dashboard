@@ -401,9 +401,9 @@ export const GOAL_INSIGHT_MAP = {
 
 // ─── Suggested starter questions ─────────────────────────────────────────────
 export const SUGGESTED_QUESTIONS = [
-  'Why did revenue drop last month?',
+  'How can I improve conversion?',
+  'When should I make a new promotion?',
   'Which marketing channel has the best ROI?',
-  'How can I improve my conversion rate?',
   'What\'s causing cart abandonment?',
   'How healthy is my pipeline?',
   'Why are tickets breaching SLA?',
