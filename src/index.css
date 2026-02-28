@@ -276,6 +276,18 @@ ul, ol { list-style: none; }
   position: sticky;
   top: var(--header-h);
   z-index: 90;
+  overflow: hidden;
+}
+/* Fade hint on right edge so users know to scroll */
+.app-tabs::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  background: linear-gradient(to right, transparent, var(--bg-surface));
+  pointer-events: none;
 }
 .tabs-inner {
   display: flex;
@@ -291,7 +303,7 @@ ul, ol { list-style: none; }
   display: flex;
   align-items: center;
   gap: var(--s2);
-  padding: var(--s4) var(--s4);
+  padding: var(--s4) var(--s3);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-3);
